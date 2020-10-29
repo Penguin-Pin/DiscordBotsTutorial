@@ -1,13 +1,20 @@
-const Discord = require("discord.js"); //Подключаем discord.js для дальнейшего использования.
-const client = new Discord.Client();//Добавляем нового клиента
-client.login("token"); //Где token пишем токен бота.
+let discord = require("discord.js"); //Подключаем Discord.js
+let config = require("./config.json"); //Подключаем конфиг
 
-let config = require("./config.json")//Импортируем конфиг из файла config.json
+let client = new discord.Client(); //Главный объект Discord.js - с него начинается обработка событий
+client.on("message", message => { //Создаем обработчик событий на message
+    //Используем message.content
+    if(message.content == `${config.prefix}test`){ //ВАЖНО: объект Message содержит всю информацию о сообщении, но не его содержание!
+        message.reply("Я живой!"); //Отвечаем на сообщение
+    }
+});
 
-client.on("message", message => { //Пришло сообщение.
-if(message.content==config.prefix + "ping") //Если текст сообщения равен префиксу плюс ping, то происходит код в {}
-{
-message.reply("мой пинг равен " + client.ping) //message.reply отвечает на сообщение.
-//Также можно использовать message.channel.send(message.author + ", мой пинг равен " + client.ping);
-}
-})
+client.on("message",message => {
+    if(message.content == `${config.prefix}play`) message.reply("Я не умею играть")
+});
+
+client.on("message", message => {
+    if(message.content == `${config.prefix}ping`)message.reply("твой пинг равен"+client.ping)
+});
+
+client.login(process.env.BOT_TOKEN); 
